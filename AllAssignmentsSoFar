@@ -1,0 +1,1459 @@
+import java.util.Scanner;
+// Custom Exception for Room Type Not Available
+class RoomTypeNotAvailableException extends Exception {
+public RoomTypeNotAvailableException(String message) {
+super(message);
+}
+}
+class InsufficientBalanceException extends Exception {
+public InsufficientBalanceException(String message) {
+super(message);
+}
+}
+class InvalidStayDurationException extends Exception {
+public InvalidStayDurationException(String message) {
+super(message);
+}
+}
+class HotelBooking {
+private double balance;
+private static final double ROOM_COST_PER_DAY = 100.0;
+private static final String[] AVAILABLE_ROOMS = {"Single", "Double", "Suite"};
+// Constructor
+public HotelBooking(double balance) {
+this.balance = balance;
+}
+public boolean isRoomTypeAvailable(String roomType) {
+for (String room : AVAILABLE_ROOMS) {
+if (room.equalsIgnoreCase(roomType)) {
+return true;
+}
+}
+return false;
+}
+public double getBalance() {
+return balance;
+}
+public void bookRoom(String roomType, double payment, int days)
+throws RoomTypeNotAvailableException, InsufficientBalanceException, InvalidStayDurationException {
+// Validate room type
+if (!isRoomTypeAvailable(roomType)) {
+throw new RoomTypeNotAvailableException("Room type " + roomType + " is not available.");
+}
+// Validate stay duration
+if (days <= 0) {
+throw new InvalidStayDurationException("Stay duration must be positive. Invalid stay: " + days);
+}
+// Calculate total cost
+double totalCost = ROOM_COST_PER_DAY * days;
+// Validate payment
+if (payment < totalCost) {
+throw new InsufficientBalanceException("Payment of " + payment + " is insufficient. Total cost is " + totalCost);
+}
+// Deduct payment from balance
+balance -= payment;
+System.out.println("Room booked successfully! Remaining balance: Rs " + balance);
+}
+}
+// Main Class
+public class Main {
+public static void main(String[] args) {
+Scanner scanner = new Scanner(System.in);
+// Taking user inputs
+System.out.print("Enter account balance: ");
+double balance = scanner.nextDouble();
+scanner.nextLine(); // Consume newline
+System.out.print("Enter room type (Single, Double, Suite): ");
+String roomType = scanner.nextLine();
+System.out.print("Enter payment amount: ");
+double payment = scanner.nextDouble();
+System.out.print("Enter stay duration (in days): ");
+int days = scanner.nextInt();
+// Creating HotelBooking instance
+HotelBooking booking = new HotelBooking(balance);
+// Attempting to book a room with exception handling
+try {
+booking.bookRoom(roomType, payment, days);
+} catch (RoomTypeNotAvailableException | InsufficientBalanceException | InvalidStayDurationException e) {
+System.out.println(e.getMessage());
+}
+scanner.close();
+}
+
+
+---------------------------
+
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+class Population {
+HashMap<String, Integer> dataList = new HashMap<>();
+String maxPopulation() {
+String maxCountry = "";
+int maxPop = Integer.MIN_VALUE;
+for (Map.Entry<String, Integer> entry : dataList.entrySet()) {
+if (entry.getValue() > maxPop) {
+maxPop = entry.getValue();
+maxCountry = entry.getKey();
+}
+}
+return maxCountry;
+}
+int totalPopulation() {
+int total = 0;
+for (int population : dataList.values()) {
+total += population;
+}
+return total;
+}
+}
+public class Main {
+public static void main(String[] args) {
+Scanner scanner = new Scanner(System.in);
+Population populationData = new Population();
+for (int i = 0; i < 3; i++) {
+String country = scanner.next();
+int population = scanner.nextInt();
+populationData.dataList.put(country, population);
+}
+System.out.println(populationData.maxPopulation());
+System.out.println(populationData.totalPopulation());
+scanner.close();
+}
+
+
+---------------
+
+package assignment;
+
+class Student1 {
+    String name;
+    String usn;
+    String college;
+    int cgpa;
+
+    Student1(String name, String usn, String college, int cgpa) {
+        this.name = name;
+        this.usn = usn;
+        this.college = college;
+        this.cgpa = cgpa;
+    }
+
+    @Override
+    public String toString() {
+        return "Student1{" +
+                "name='" + name + '\'' +
+                ", usn='" + usn + '\'' +
+                ", college='" + college + '\'' +
+                ", cgpa=" + cgpa +
+                '}';
+    }
+}
+
+class StudentImplementation {
+    Student1 stuname;
+
+    StudentImplementation(Student1 stuname) {
+        this.stuname = stuname;
+    }
+
+    Student1 getStudentInfo(String str) {
+        if (stuname != null && stuname.name.equals(str)) {
+            return this.stuname;
+        }
+        return null;
+    }
+
+    public String getStudentSection(Student1 std) {
+        if (std == null || std.usn.length() < 3) {
+            return "Invalid USN";
+        }
+
+        String lastThreeDigitsStr = std.usn.replaceAll("[^0-9]", ""); // Extract numbers from USN
+        if (lastThreeDigitsStr.length() < 3) {
+            return "Invalid USN";
+        }
+
+        lastThreeDigitsStr = lastThreeDigitsStr.substring(lastThreeDigitsStr.length() - 3); // Get last three digits
+        int lastThreeDigits = Integer.parseInt(lastThreeDigitsStr);
+
+        if (lastThreeDigits >= 1 && lastThreeDigits <= 60) {
+            return "A";
+        } else if (lastThreeDigits >= 61 && lastThreeDigits <= 120) {
+            return "B";
+        } else if (lastThreeDigits >= 121 && lastThreeDigits <= 180) {
+            return "C";
+        }
+        return "Z";
+    }
+}
+
+public class StdDemo {
+    public static void main(String[] args) {
+        Student1 s2 = new Student1("chenna", "MIT123060", "mits", 8); // Ensure USN has digits
+        StudentImplementation si = new StudentImplementation(s2);
+
+        Student1 result = si.getStudentInfo("chenna");
+        if (result != null) {
+            System.out.println("Student Found: " + result);
+            System.out.println("Section: " + si.getStudentSection(result));
+        } else {
+            System.out.println("Student Not Found");
+        }
+    }
+}
+-------------------------------//color Code
+
+package assignment;
+class ColorCodevalidator{
+    String str;
+   int validateHex(String str){
+        if(str.matches("^#[A-Fa-f0-9]{6}$")) {
+            return 1;
+        }
+       return -1;
+        }
+    int validateDecimalCode(String str) {
+        if (!str.startsWith("rgb(") || !str.endsWith(")")) {
+            return -1;
+        }
+
+        String content = str.substring(4, str.length() - 1);
+        String[] values = content.split(",");
+
+        if (values.length != 3) {
+            return -1;
+        }
+
+        for (String value : values) {
+            try {
+                int num = Integer.parseInt(value.trim());
+                if (num < 0 || num > 255) {
+                    return -1;
+                }
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
+
+        return 1;
+    }
+    }
+
+
+
+public class ColorCodeValidatorDemo {
+    public static void main(String[] args) {
+    ColorCodevalidator cv=new ColorCodevalidator();
+        System.out.println(cv.validateDecimalCode("rgb(255,255,255)") == 1 ? "Valid" : "Invalid");
+        System.out.println(cv.validateDecimalCode("rgb(252,0,0)") == 1 ? "Valid" : "Invalid");
+        System.out.println( cv.validateHex("#123455")==1?"valid":"invalid");
+    }
+}
+-------------------streamapi
+
+
+package assignment;
+
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+class Author {
+    private String firstName;
+    private String lastName;
+
+    public Author(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
+}
+
+class Book {
+    private String title;
+    private Author author;
+
+    public Book(String title, Author author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+}
+
+class BookImplementation {
+    public List<String> firstNameOfAuthors(Author... authors) {
+        return Arrays.stream(authors)
+                .map(Author::getFirstName)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> titlesOf(Book... books) {
+        return Arrays.stream(books)
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+}
+
+public class BookImplementDemo {
+    public static void main(String[] args) {
+        Author joshuaBloch = new Author("Joshua", "Bloch");
+        Author brianGoetz = new Author("Brian", "Goetz");
+        Author barryBurd = new Author("Barry", "Burd");
+
+        Book Java1 = new Book("Effective Java", joshuaBloch);
+        Book Java2 = new Book("Java Concurrency In Practice", brianGoetz);
+        Book Java3 = new Book("Java For Dummies", barryBurd);
+
+        BookImplementation bookImplementation = new BookImplementation();
+
+        System.out.println(bookImplementation.titlesOf(Java1, Java2, Java3));
+        System.out.println(bookImplementation.firstNameOfAuthors(joshuaBloch, brianGoetz, barryBurd));
+    }
+}
+
+
+------------------------------string toint
+
+package assignment;
+
+import static java.lang.Integer.parseInt;
+
+class StringPlay{
+    int convert;
+    int max;
+}
+class  StringMethods{
+    String str;
+   int convertToInt(StringPlay sp,String str){
+       int result=parseInt(str);
+      return sp.convert=result;
+
+
+    }
+    int getMax(StringPlay sp,String str,char ch){
+       int counter=0;
+       for(int i=0;i<str.length();i++){
+           if(str.charAt(i)==ch){
+               counter++;
+           }
+
+       }
+       return sp.max=counter;
+    }
+
+}
+public class ConvertToIntAndCountOfChar {
+    public static void main(String[] args) {
+
+        StringPlay sp=new StringPlay();
+        StringMethods sm=new StringMethods();
+        System.out.println(sm.convertToInt(sp,"123"));
+        System.out.println(sm.getMax(sp,"helloooo", 'e'));
+
+
+
+
+    }
+}
+
+---------------parking 
+
+
+package assignment;
+
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
+public class ParkingMainDEmo {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        try {
+            System.out.print("Enter In-Time (HH:mm): ");
+            LocalTime inTime = LocalTime.parse(scanner.next(), formatter);
+
+            System.out.print("Enter Out-Time (HH:mm): ");
+            LocalTime outTime = LocalTime.parse(scanner.next(), formatter);
+
+            if (outTime.isBefore(inTime)) {
+                System.out.println("Error: Out-Time must be after In-Time.");
+                return;
+            }
+
+            long totalMinutes = Duration.between(inTime, outTime).toMinutes();
+            long hours = totalMinutes / 60;
+            long remainingMinutes = totalMinutes % 60;
+
+            int totalCharge = (int) (hours * 10 + (remainingMinutes > 0 ? 10 : 0));
+
+            System.out.println("Total Parking Fee: " + totalCharge + " Rupees");
+        } catch (Exception e) {
+            System.out.println("Invalid input format. Please enter time in HH:mm format.");
+        } finally {
+            scanner.close();
+        }
+    }
+}
+============= strinQ
+
+
+package assignment;
+
+class Student5 {
+    String name;
+    String usn;
+    String college;
+    int cgpa;
+
+    public Student5(String name, String usn, String college, int cgpa) {
+        this.name = name;
+        this.usn = usn;
+        this.college = college;
+        this.cgpa = cgpa;
+    }
+}
+
+class StudentImplementation5 {
+
+    public Student5 getStudentInfo(String str) {
+        String[] parts = str.split("[@#-]");
+
+        String name = parts[0];
+        String usn = parts[1];
+        String college = parts[2];
+        int cgpa = Integer.parseInt(parts[3]);
+
+        return new Student5(name, usn, college, cgpa);
+    }
+
+    public String getStudentSection(Student5 s) {
+        String lastThreeDigits = s.usn.substring(s.usn.length() - 3);
+        int usnNumber = Integer.parseInt(lastThreeDigits);
+
+        if (usnNumber >= 1 && usnNumber <= 60) return "A";
+        else if (usnNumber >= 61 && usnNumber <= 120) return "B";
+        else if (usnNumber >= 121 && usnNumber <= 180) return "C";
+        else return "Z";
+    }
+}
+
+public class Main5 {
+    public static void main(String[] args) {
+        String input = "Amit Rai@1PC16CS046-ALU#8";
+        StudentImplementation5 si = new StudentImplementation5();
+
+        Student5 student = si.getStudentInfo(input);
+
+        System.out.println(student.name);
+        System.out.println(student.usn);
+        System.out.println(student.college);
+        System.out.println(student.cgpa);
+
+        System.out.println(si.getStudentSection(student));
+    }
+}
+
+
+-------------------------patternAndothers
+
+
+package javabasics;
+import java.util.*;
+
+public class arr1 {
+	public static void main(String[] args) {
+		
+		
+		 int n=5;
+	        int x=1;
+	        
+	        for(int i=1;i<=n;i++){
+	            for(int j=1;j<=i;j++){
+	                System.out.print(x+" ");
+	                x++;
+	            }
+	            System.out.println();
+	        }
+	        
+	        
+	        
+	        System.out.println("--------------------------------");
+	        
+	        for(int i=n-1;i>=1;i--){
+	            for(int j=i;j>=1;j--){
+	                System.out.print(" ");
+	            }
+	            for(int j=1;j<=n-i;j++){
+	                System.out.print("*");
+	            }
+	            for(int j=1;j<n-i;j++){
+	                System.out.print("*");
+	            }
+	            System.out.println();
+	        }
+	        
+	        System.out.println("--------------------------------");
+	        
+	        for(int i=1;i<=n;i++){
+	            for(int j=i;j>=1;j--){
+	                System.out.print(" ");
+	            }
+	            for(int j=1;j<=n-i;j++){
+	                System.out.print("*");
+	            }
+	            for(int j=1;j<n-i;j++){
+	                System.out.print("*");
+	            }
+	            System.out.println();
+	        }
+		
+		
+	}
+	
+	
+	//// Question: Missing number
+	
+	public static int misssingNum(int[] arr, int n) {
+		
+		int sum=0;
+		for(int i=0;i<arr.length;i++) {
+			sum+=arr[i];
+		}
+		return ((n*n+1)/2)-sum;
+	}
+	
+	
+	
+	 
+	public static int duplicate(int[] arr) {
+		Arrays.sort(arr);
+		for(int i=0;i<arr.length-1;i++) {
+			if((arr[i]^arr[i+1])==0) {
+				return arr[i];
+			}
+		}
+		
+		return -1;
+	}
+	
+	
+	//// // Question: all duplicates
+	
+	public static List<Integer> allDuplicates(int[] arr) {
+		HashMap<Integer, Integer> hashMap = new HashMap<>();
+		for(int i=0;i<arr.length;i++) {
+				hashMap.put(arr[i], hashMap.getOrDefault(arr[i], 0) + 1);
+			
+		}
+		List<Integer> ans = new ArrayList<>();
+		for (Map.Entry<Integer, Integer> entry : hashMap.entrySet()) {
+		    Integer key = entry.getKey();
+		    Integer value = entry.getValue();
+		    if(value>1) {
+		    	ans.add(key);
+		    	
+		    }
+		    
+		}
+		return ans;
+		
+		
+		
+	}
+	
+	
+	
+	
+	////////// Question: Pair sum
+	
+	//// need to fix as it's missing few pairs
+	public static HashMap<Integer, Integer> parisum(int[] arr, int sum) {
+		HashMap<Integer, Integer> hashMap = new HashMap<>();
+		for(int i=0;i<arr.length;i++) {
+				hashMap.put(arr[i], hashMap.getOrDefault(arr[i], 0) + 1);
+			
+		}
+		HashMap<Integer, Integer> hm = new HashMap<>();
+		for(int i=0;i<arr.length;i++) {
+			int x=sum-arr[i];
+			if (hashMap.containsKey(x) && hashMap.get(x)>1) {
+				hm.put(arr[i], x);
+				hashMap.put(x, hashMap.get(x)-1);
+			}
+			
+			
+		}
+		
+		return hm;
+	}
+	
+	
+	////// Question:  Array rotation
+	public static int[] rotateByX(int[] arr, int x) {
+		x=x%arr.length;
+		int[] a=new int[x];
+		for(int i=0;i<x;i++) {
+			a[i]=arr[i];
+		}
+		
+		for(int i=0;i<arr.length-x;i++) {
+			arr[i]=arr[i+x];
+		}
+		int b=0;
+		for(int i=x-1;i<arr.length && b<x;i++) {
+			arr[i]=a[b];
+			b++;
+		}
+		return arr;
+	}
+	
+	
+	
+	
+	
+	///// Question: array intersection
+	public static int[] arrIntersection(int[] a1, int[] a2) {
+		Arrays.sort(a1);
+		Arrays.sort(a2);
+		int n=Math.max(a1.length, a2.length);
+		int[] ans=new int[n];
+		int x=0,y=0,z=0;
+		while(x<a1.length && y<a2.length) {
+			if(a1[x]==a2[y]) {
+				ans[z]=a1[x];
+				x++;
+				y++;
+				z++;
+			}
+			else if(a1[x]<a2[y]) {
+				x++;
+			}
+			else {
+				y++;
+			}
+			
+			
+		}
+		
+		
+		return ans;
+	}
+	
+	
+	
+	
+	
+
+}
+
+
+
+----------------------------------carimpliment
+
+
+package assignment;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Arrays;
+
+class Car {
+    private String name;
+    private String carName;
+    private double price;
+
+
+    public Car(String name, String carName, double price) {
+        this.name = name;
+        this.carName = carName;
+        this.price = price;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public String getCarName() {
+        return carName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCarName(String carName) {
+        this.carName = carName;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+
+class CarImplementation {
+
+
+    public double sumOfPrices(List<Car> carList) {
+        return carList.stream()
+                .map(Car::getPrice)
+                .reduce(0.0, Double::sum);
+    }
+
+
+    public List<String> printName(List<Car> carList) {
+        return carList.stream()
+                .filter(car -> car.getPrice() > 25000)
+                .map(Car::getCarName)
+                .collect(Collectors.toList());
+    }
+
+    // Method to get the maximum car price
+    public double maxPrice(List<Car> carList) {
+        return carList.stream()
+                .map(Car::getPrice)
+                .max(Double::compare)
+                .orElse(0.0);
+    }
+}
+
+public class CarStreamApiDemo {
+    public static void main(String[] args) {
+        List<Car> carList = Arrays.asList(
+                new Car("John", "Alfa Romeo", 50000),
+                new Car("Alice", "Bugatti", 800000),
+                new Car("Bob", "Chrysler", 45000),
+                new Car("Eve", "Dodge", 55000),
+                new Car("Sam", "Essen", 910000),
+                new Car("Max", "Ford", 20000)
+        );
+
+        CarImplementation carImpl = new CarImplementation();
+
+        System.out.println(carImpl.sumOfPrices(carList));
+        System.out.println(carImpl.printName(carList));
+        System.out.println(carImpl.maxPrice(carList));
+    }
+}
+
+
+
+
+
+------------------------------practice Assessment
+
+1.
+import java.util.Scanner;
+import java.lang.Math.*;
+/**
+* Main class
+*/
+public class Main {
+/**
+* Main method
+* @param args
+*/
+public static void main(String[] args) {
+Scanner s=new Scanner(System.in);
+int n1=s.nextInt();
+int n2=s.nextInt();
+if(n1==n2){
+System.out.println(0);
+}
+else if(isPrime(n1)&& isPrime(n2)){
+System.out.println((int)Math.max(n1,n2));
+}else{
+System.out.println((int)Math.min(n1,n2));
+}
+}
+public static boolean isPrime(int num){
+//boolean ans=false;
+if(num<2){
+return false;
+}
+for(int i=2;i<=Math.sqrt(num);i++){
+if(num%i==0){
+return false;
+}
+}
+return true;
+}
+}
+
+
+2.
+
+
+import java.util.Scanner;
+class Main {
+public static void main(String[] args) {
+Scanner s=new Scanner(System.in);
+int n1=s.nextInt();
+int n2=s.nextInt();
+int n3=s.nextInt();
+if(isValidMarks(n1)&& isValidMarks(n2)&& isValidMarks(n3)){
+int avg=(n1+n2+n3)/3;
+if(avg>=70){
+System.out.println("DISTINCTION");
+}
+else if(avg>=60){
+System.out.println("FIRST");
+}
+else if(avg>=50){
+System.out.println("SECOND");
+}
+else if(avg>=40){
+System.out.println("THIRD");
+}
+else{
+System.out.println("FAIL");
+}
+} else{
+System.out.println("INVALIDMARKS");
+}
+}
+public static boolean isValidMarks(int marks) {
+// implement logic here
+if(marks<0 || marks>100){
+return false;
+}
+return true;
+}
+}
+------3
+
+import java.util.Scanner;
+import java.lang.Math.*;
+/**
+* Main class
+*/
+public class Main {
+/**
+* Main method
+* @param args
+*/
+public static void main(String[] args) {
+// implement logic here
+Scanner s=new Scanner(System.in);
+int x=s.nextInt();
+int y=s.nextInt();
+int z=s.nextInt();
+if(x<y || y<z || x<z){
+
+System.out.println("INVALID_INPUT");
+}
+else if(Math.pow(x,2)== (Math.pow(y,2)+Math.pow(z,2))){
+System.out.println("RIGHT ANGLE");
+}
+else{
+System.out.println("NOT RIGHT ANGLE");
+}
+}
+}
+
+--------------------------
+
+
+import java.util.Scanner;
+class Main {
+public static void main(String args[])
+{
+Scanner scanner = new Scanner(System.in);
+int no = scanner.nextInt();
+if(no>0){
+int count=0;
+String designations[]=new String[no];
+String input[] = new String[no];
+for(int i = 0; i<no; i++) {
+input[i] = scanner.next();
+}
+for(int i=0;i<no;i++)
+{
+if(input[i].equalsIgnoreCase("Sales"))
+{
+designations[count]=input[i];
+count++;
+}
+}
+if(count>=1)
+{
+
+System.out.println("Designations in Sales Department "+count);
+for(int j=0;j<count;j++)
+{
+System.out.println(designations[j]);
+}
+}
+else
+{
+System.out.println("No designations in Sales department");
+}
+}
+else {
+System.out.println("INVALID INPUT");
+}
+}
+}
+----------------------------
+
+
+import java.util.Scanner;
+/**
+* Main class
+*/
+public class Main {
+/**
+* Main method
+* @param args
+*/
+public static void main(String[] args) {
+////int id;
+//String code;
+Scanner in = new Scanner(System.in);
+int age=in.nextInt();
+Voter v=new Voter();
+v.checkEligibility(age);
+/*System.out.print("Enter id: ");
+id = in.nextInt();in.nextLine();
+System.out.print("Enter code: ");
+code = in.nextLine();
+System.out.print("values " + id + " " + code); */
+}
+Instructions
+Instructions
+Ensure your code compiles without any errors/warning/deprecations
+Follow best practices while coding
+Avoid too many & unnecessary usage of white spaces (newline, spaces, tabs, …), except to make the code readable
+Use appropriate comments at appropriate places in your exercise, to explain the logic, rational, solutions, so that evaluator can know them
+Try to retain the original code given in the exercise, to avoid any issues in compiling & running your programs
+Always test the program thoroughly, before saving/submitting exercises/project
+For any issues with your exercise, contact your coach
+}
+class Voter{
+public static void checkEligibility(int age){
+if(age>=18){
+System.out.print("Congratulations! You are eligible for voting");
+} else{
+System.out.print("Sorry! Not eligible for Voting. You have to wait for "+ (18-age)+" years");
+}
+}
+}
+----------------------------
+
+
+
+
+import java.util.Scanner;
+class Person {
+// Attributes of the Person class
+private String name;
+private int age;
+private char gender;
+// Constructor to initialize Person object
+public Person(String name, int age, char gender) {
+this.name = name;
+this.age = age;
+this.gender = gender;
+}
+// Getters and setters for the attributes
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public int getAge() {
+return age;
+}
+public void setAge(int age) {
+this.age = age;
+}
+public char getGender() {
+return gender;
+}
+public void setGender(char gender) {
+this.gender = gender;
+}
+// Override the equals() method to compare two Person objects
+@Override
+public boolean equals(Object obj) {
+// Check if the objects are the same reference
+if (this == obj) {
+return true;
+}
+// Check if the passed object is of Person type
+if (obj instanceof Person) {
+Person otherPerson = (Person) obj;
+// Compare attributes for equality
+return this.name.equals(otherPerson.name) &&
+this.age == otherPerson.age &&
+this.gender == otherPerson.gender;
+}
+return false; // Return false if it's not a Person object
+}
+}
+public class Main {
+public static void main(String[] args) {
+// Create scanner object to read input
+Scanner sc = new Scanner(System.in);
+// Read the first person's details
+String name1 = sc.next();
+int age1 = sc.nextInt();
+char gender1 = sc.next().charAt(0);
+// Create the first Person object
+Person person1 = new Person(name1, age1, gender1);
+// Read the second person's details
+String name2 = sc.next();
+int age2 = sc.nextInt();
+char gender2 = sc.next().charAt(0);
+// Create the second Person object
+Person person2 = new Person(name2, age2, gender2);
+// Check if the two Person objects are the same
+if (person1.equals(person2)) {
+System.out.println("Same");
+} else {
+System.out.println("Different");
+}
+// Close scanner
+sc.close();
+}
+}
+
+--------
+
+import java.util.Scanner;
+class Main {
+public static void main(String[] args) {
+int units;
+Scanner sc = new Scanner(System.in);
+units = sc.nextInt();
+double amount = calculateElectricityBill(units);
+if (amount == -1) {
+System.out.println("INVALID INPUT");
+} else {
+System.out.println(amount);
+}
+}
+static double calculateElectricityBill(int units) {
+if (units < 0) {
+return -1;
+}
+double billpay = 0.0;
+if (units <= 30) {
+billpay = units * 3.5;
+} else if (units <= 100) {
+billpay = 30 * 3.5 + (units - 30) * 4.0;
+} else {
+billpay = 30 * 3.5 + 70 * 4.0 + (units - 100) * 5.0;
+}
+return billpay;
+}
+}
+
+
+-----------------------     
+
+
+
+
+
+public static void main(String[] args) {
+String input = "Amit Rai@1PC16CS046-ALU#8";
+StudentImplementation studentImpl = new StudentImplementation();
+Student student = studentImpl.getStudentInfo(input);
+System.out.println(student.name);
+System.out.println(student.usn);
+System.out.println(student.college);
+System.out.println(student.cgpa);
+String section = studentImpl.getStudentSection(student);
+System.out.println(section);
+}
+}
+class Student{
+String name;
+String usn;
+String college;
+int cgpa;
+Student(String name,String usn,String college,int cgpa){
+this.name=name;
+this.usn=usn;
+this.college=college;
+this.cgpa=cgpa;
+}
+}
+class StudentImplementation {
+public Student getStudentInfo(String str) {
+String[] parts = str.split("@|#|-");
+String name = parts[0];
+String usn = parts[1];
+String college = parts[2];
+int cgpa = Integer.parseInt(parts[3]);
+return new Student(name, usn, college, cgpa);
+}
+public String getStudentSection(Student s) {
+int lastThreeDigits = Integer.parseInt(s.usn.substring(s.usn.length() - 3));
+Instructions
+Not Available
+if (lastThreeDigits >= 1 && lastThreeDigits <= 60) {
+return "A";
+} else if (lastThreeDigits >= 61 && lastThreeDigits <= 120) {
+return "B";
+} else if (lastThreeDigits >= 121 && lastThreeDigits <= 180) {
+return "C";
+} else {
+return "Z";
+}
+}
+}
+------------------------- max and min from ArrayList
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+public class Main {
+/*
+Main method
+*/
+public static void main(String[] args) {
+Scanner scanner = new Scanner(System.in);
+ArrayList<Integer> scores = new ArrayList<>();
+while (scores.size() <= 5) {
+int value = scanner.nextInt();
+if (!scores.contains(value)) {
+scores.add(value);
+}
+}
+scanner.close();
+// Call method to remove max and min values
+removeMaxMin(scores);
+// Print the modified list
+System.out.print("[");
+for(int i=0;i<scores.size();i++){
+if(i<scores.size()-1){
+System.out.print(scores.get(i)+",");
+Instructions
+Instructions
+Ensure your code compiles without any errors/warning/deprecations
+Follow best practices while coding
+Avoid too many & unnecessary usage of white spaces (newline, spaces, tabs, …), except to make the code readable
+Use appropriate comments at appropriate places in your exercise, to explain the logic, rational, solutions, so that evaluator can know them
+Try to retain the original code given in the exercise, to avoid any issues in compiling & running your programs
+Always test the program thoroughly, before saving/submitting exercises/project
+For any issues with your exercise, contact your coach
+} else{
+System.out.print(scores.get(i));
+}
+}
+System.out.print("]");
+}
+/**
+* Removes the maximum and minimum values from the given list.
+* @param scores The list of integer values.
+*/
+public static void removeMaxMin(ArrayList<Integer> scores) {
+if (scores.size() < 2) {
+return; // Not enough elements to remove both min and max
+}
+int max = Collections.max(scores);
+int min = Collections.min(scores);
+scores.remove(Integer.valueOf(max)); // Remove max value
+scores.remove(Integer.valueOf(min)); // Remove min value
+}
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------
+
+/******************
+ * Following is the main function we are using internally.
+ * Refer this for completing the ComplexNumbers class
+ * 
+ 
+ public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+
+		int real1 = s.nextInt();
+		int imaginary1 = s.nextInt();
+
+		int real2 = s.nextInt();
+		int imaginary2 = s.nextInt();
+
+		ComplexNumbers c1 = new ComplexNumbers(real1, imaginary1);
+		ComplexNumbers c2 = new ComplexNumbers(real2, imaginary2);
+
+		int choice = s.nextInt();
+		 
+		if(choice == 1) {
+			// Add
+			c1.plus(c2);
+			c1.print();
+		}
+		else if(choice == 2) {
+			// Multiply
+			c1.multiply(c2);
+			c1.print();
+		}
+		else {
+			return;
+		}
+	}
+ ******************/
+
+public class ComplexNumbers {
+	// Complete this class
+	int realNum;
+	int imaginaryNum;
+
+ public ComplexNumbers(int x, int y){
+		realNum=x;
+		imaginaryNum=y;
+	}
+
+	 void print(){
+		 if(imaginaryNum>0){
+		System.out.print(realNum+" + i"+imaginaryNum);
+		}
+		else{
+			System.out.print(realNum+" - i"+-1*imaginaryNum);
+		}
+	}
+
+	 void plus(ComplexNumbers c){
+		realNum=realNum+c.realNum;
+		imaginaryNum=imaginaryNum+c.imaginaryNum;
+	}
+
+	void multiply(ComplexNumbers c){
+		int x=realNum;
+		realNum=realNum*c.realNum - imaginaryNum*c.imaginaryNum;
+		imaginaryNum=x*c.imaginaryNum + c.realNum*imaginaryNum;
+	}
+
+
+	
+}
+
+
+
+
+
+------------------------------------------------------------------------
+
+
+
+
+
+
+
+/* Signature of four required functions is given in the code. You can create other functions as well if you need.
+*  Also you should submit your code even if you are not done with all the functions. 
+*/
+
+// Main used internally is shown here just for your reference.
+/*public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int degree1[] = new int[n];
+		for(int i = 0; i < n; i++){
+			degree1[i] = s.nextInt();
+		}
+		int coeff1[] = new int[n];
+		for(int i = 0; i < n; i++){
+			coeff1[i] = s.nextInt();
+		}
+		Polynomial first = new Polynomial();
+		for(int i = 0; i < n; i++){
+			first.setCoefficient(degree1[i],coeff1[i]);
+		}
+		n = s.nextInt();
+		int degree2[] = new int[n];
+		for(int i = 0; i < n; i++){
+			degree2[i] = s.nextInt();
+		}
+		 int coeff2[] = new int[n];
+		for(int i = 0; i < n; i++){
+			coeff2[i] = s.nextInt();
+		}
+		Polynomial second = new Polynomial();
+		for(int i = 0; i < n; i++){
+			second.setCoefficient(degree2[i],coeff2[i]);
+		}
+		int choice = s.nextInt();
+		Polynomial result;
+		switch(choice){
+		// Add
+		case 1: 
+			 result = first.add(second);
+			result.print();
+			break;
+		// Subtract	
+		case 2 :
+			 result = first.subtract(second);
+			result.print();
+			break;
+		// Multiply
+		case 3 :
+			 result = first.multiply(second);
+			result.print();
+			break;
+		}
+
+	}
+  */
+
+
+public class Polynomial {
+	static int[] poly;
+	int coeff;
+	int degree;
+	
+
+	
+	/* This function sets coefficient for a particular degree value, if degree is not there in the polynomial
+	 *  then corresponding term with specified degree and value is added int the polynomial. If the degree
+	 *  is already present in the polynomial then previous coefficient is replaced by
+	 *  new coefficient value passed as function argument
+	*/
+	public Polynomial(){
+		poly=new int[5];
+	}
+
+	public void setCoefficient(int degree, int coeff){
+		if(degree>=poly.length){
+			doubleCapacity();
+		}
+		poly[degree]=coeff;
+		this.degree=degree;
+		this.coeff=coeff;
+		
+
+		
+	}
+	public int coeff(int deg){
+		if(deg<poly.length){
+			return poly[deg];
+		}
+		else{
+			return 0;
+		}
+	}
+
+	//double capacity
+	private void doubleCapacity(){
+		int[] temp=poly;
+		poly=new int[2*poly.length];
+		for(int i=0;i<temp.length;i++){
+			poly[i]=temp[i];
+		}
+	}
+	
+	// Prints all the terms(only terms with non zero coefficients are to be printed) in increasing order of degree. 
+	public void print(){
+		for(int i=0;i<poly.length;i++){
+			if(poly[i]!=0){
+			System.out.print(poly[i]+"x"+i+" ");
+			}
+		}
+		
+	}
+
+	
+	// Adds two polynomials and returns a new polynomial which has result
+	public Polynomial add(Polynomial p){
+		if(p.poly.length>poly.length){
+			doubleCapacity();
+		}
+		for(int i=0;i<poly.length;i++){
+			poly[i]+=p.poly[i];
+		}
+		return this;
+		
+	}
+	
+	// Subtracts two polynomials and returns a new polynomial which has result
+	public Polynomial subtract(Polynomial p){
+		if(p.poly.length>poly.length){
+			doubleCapacity();
+		}
+		for(int i=0;i<poly.length;i++){
+			poly[i]-=p.poly[i];
+		}
+		return this;
+			
+	}
+	
+	// Multiply two polynomials and returns a new polynomial which has result
+	public Polynomial multiply(Polynomial p){
+		Polynomial p1=new Polynomial();
+		for(int i=0;i<poly.length;i++){
+			for(int j=0;j<p.poly.length;j++){
+				int y=poly[i]*p.poly[j];
+				int x=i+j;
+				int z=p1.coeff(x);
+				p1.setCoefficient(x, y+z);
+				
+			}
+		}
+		return p1;
+	}
+
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
